@@ -103,7 +103,7 @@ public class MohistRemapper {
     @SneakyThrows
     public static void init(McVersion mcVersion) {
         if (!mcVersion.equals(McVersion.v1_19_3)) {
-            throw new UnsupportedOperationException("Versions earlier than 1.19.3 are not supported, Please wait for follow-up support!");
+            //throw new UnsupportedOperationException("Versions earlier than 1.19.3 are not supported, Please wait for follow-up support!");
         }
         obsVersion = mcVersion;
         INSTANCE = new MohistRemapper();
