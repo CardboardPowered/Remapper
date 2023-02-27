@@ -179,7 +179,7 @@ public class MohistReflectionHandler extends ClassLoader {
     // srg -> bukkit
     public static String handlePackageGetName(String name) {
         if (name.startsWith(PREFIX)) {
-            return PREFIX + "server." + MohistRemapper.getMcVersion().getObs_version();
+            return PREFIX + "server." + MohistRemapper.obsVersion.getObs_version();
         } else {
             return name;
         }

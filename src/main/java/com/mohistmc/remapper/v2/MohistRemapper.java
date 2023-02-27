@@ -4,8 +4,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mohistmc.remapper.McVersion;
 import com.mohistmc.remapper.utils.Unsafe;
-import lombok.Data;
-import lombok.Getter;
 import lombok.Setter;
 import net.md_5.specialsource.InheritanceMap;
 import net.md_5.specialsource.JarMapping;
@@ -42,7 +40,7 @@ public class MohistRemapper {
 
     static {
         try {
-            INSTANCE = new MohistRemapper(McVersion.v1_19_3);
+            INSTANCE = new MohistRemapper();
             DUMP = null;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -66,13 +64,10 @@ public class MohistRemapper {
     private final JarRemapper toBukkitRemapper;
     private final JarRemapper toNmsRemapper;
 
-
-    @Getter
     @Setter
-    public static McVersion mcVersion;
+    public static McVersion obsVersion;
 
-    public MohistRemapper(McVersion mcVersion) throws Exception {
-        setMcVersion(mcVersion);
+    public MohistRemapper() throws Exception {
         this.toNmsMapping = new JarMapping();
         this.toBukkitMapping = new JarMapping();
         this.inheritanceMap = new InheritanceMap();
