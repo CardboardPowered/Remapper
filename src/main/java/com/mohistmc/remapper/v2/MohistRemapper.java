@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import com.mohistmc.remapper.McVersion;
 import com.mohistmc.remapper.utils.Unsafe;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import net.md_5.specialsource.InheritanceMap;
 import net.md_5.specialsource.JarMapping;
 import net.md_5.specialsource.JarRemapper;
@@ -33,19 +34,14 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class MohistRemapper {
 
-    public static final MohistRemapper INSTANCE;
+    public static final File DUMP = null;
+    public static MohistRemapper INSTANCE;
     public static Logger LOGGER = LogManager.getLogger(MohistRemapper.class.getName());
-    public static final File DUMP;
+    @Setter
+    public static McVersion obsVersion;
     private static long pkgOffset, clOffset, mdOffset, fdOffset, mapOffset;
 
     static {
-        try {
-            INSTANCE = new MohistRemapper();
-            DUMP = null;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
         try {
             pkgOffset = Unsafe.objectFieldOffset(JarMapping.class.getField("packages"));
             clOffset = Unsafe.objectFieldOffset(JarMapping.class.getField("classes"));
@@ -63,9 +59,6 @@ public class MohistRemapper {
     private final List<PluginTransformer> transformerList = new ArrayList<>();
     private final JarRemapper toBukkitRemapper;
     private final JarRemapper toNmsRemapper;
-
-    @Setter
-    public static McVersion obsVersion;
 
     public MohistRemapper() throws Exception {
         this.toNmsMapping = new JarMapping();
@@ -106,6 +99,12 @@ public class MohistRemapper {
         this.toBukkitRemapper = new LenientJarRemapper(toBukkitMapping);
         this.toNmsRemapper = new LenientJarRemapper(toNmsMapping);
         RemapSourceHandler.register();
+    }
+
+    @SneakyThrows
+    public static void init(McVersion mcVersion) {
+        obsVersion = mcVersion;
+        INSTANCE = new MohistRemapper();
     }
 
     public static ClassLoaderRemapper createClassLoaderRemapper(ClassLoader classLoader) {
