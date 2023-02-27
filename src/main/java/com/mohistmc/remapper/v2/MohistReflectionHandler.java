@@ -192,51 +192,53 @@ public class MohistReflectionHandler extends ClassLoader {
 
     // srg -> bukkit
     public static String redirectTypeGetName(java.lang.reflect.Type type) {
-        if (type instanceof Class cl) {
+        if (!(type instanceof Class cl)) {
+            if (type instanceof WildcardType wType) {
+                StringBuilder sb;
+                java.lang.reflect.Type[] bounds;
+                if (wType.getLowerBounds().length == 0) {
+                    if (wType.getUpperBounds().length == 0 || Object.class == wType.getUpperBounds()[0]) {
+                        return "?";
+                    }
+                    bounds = wType.getUpperBounds();
+                    sb = new StringBuilder("? extends ");
+                } else {
+                    bounds = wType.getLowerBounds();
+                    sb = new StringBuilder("? super ");
+                }
+                for (int i = 0; i < bounds.length; i++) {
+                    if (i > 0) {
+                        sb.append(" & ");
+                    }
+                    sb.append(redirectTypeGetName(bounds[i]));
+                }
+                return sb.toString();
+            } else if (type instanceof ParameterizedType pType) {
+                var sb = new StringBuilder();
+                if (pType.getOwnerType() != null) {
+                    sb.append(redirectTypeGetName(pType.getOwnerType()));
+                    sb.append("$");
+                    sb.append(redirectClassGetSimpleName((Class<?>) pType.getRawType()));
+                } else {
+                    sb.append(redirectTypeGetName(pType.getRawType()));
+                }
+                if (pType.getActualTypeArguments() != null) {
+                    var sj = new StringJoiner(", ", "<", ">");
+                    sj.setEmptyValue("");
+                    for (var t : pType.getActualTypeArguments()) {
+                        sj.add(redirectTypeGetName(t));
+                    }
+                    sb.append(sj);
+                }
+                return sb.toString();
+            } else if (type instanceof GenericArrayType arrayType) {
+                return redirectTypeGetName(arrayType.getGenericComponentType()) + "[]";
+            }
+        } else {
             if (cl.isArray()) {
                 return redirectTypeGetName(cl) + "[]";
             }
             return redirectClassGetName(cl);
-        } else if (type instanceof WildcardType wType) {
-            StringBuilder sb;
-            java.lang.reflect.Type[] bounds;
-            if (wType.getLowerBounds().length == 0) {
-                if (wType.getUpperBounds().length == 0 || Object.class == wType.getUpperBounds()[0]) {
-                    return "?";
-                }
-                bounds = wType.getUpperBounds();
-                sb = new StringBuilder("? extends ");
-            } else {
-                bounds = wType.getLowerBounds();
-                sb = new StringBuilder("? super ");
-            }
-            for (int i = 0; i < bounds.length; i++) {
-                if (i > 0) {
-                    sb.append(" & ");
-                }
-                sb.append(redirectTypeGetName(bounds[i]));
-            }
-            return sb.toString();
-        } else if (type instanceof ParameterizedType pType) {
-            var sb = new StringBuilder();
-            if (pType.getOwnerType() != null) {
-                sb.append(redirectTypeGetName(pType.getOwnerType()));
-                sb.append("$");
-                sb.append(redirectClassGetSimpleName((Class<?>) pType.getRawType()));
-            } else {
-                sb.append(redirectTypeGetName(pType.getRawType()));
-            }
-            if (pType.getActualTypeArguments() != null) {
-                var sj = new StringJoiner(", ", "<", ">");
-                sj.setEmptyValue("");
-                for (var t : pType.getActualTypeArguments()) {
-                    sj.add(redirectTypeGetName(t));
-                }
-                sb.append(sj);
-            }
-            return sb.toString();
-        } else if (type instanceof GenericArrayType arrayType) {
-            return redirectTypeGetName(arrayType.getGenericComponentType()) + "[]";
         }
         return type.getTypeName();
     }

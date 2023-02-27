@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
@@ -64,13 +65,11 @@ public class MohistRemapper {
         this.toNmsMapping = new JarMapping();
         this.toBukkitMapping = new JarMapping();
         this.inheritanceMap = new InheritanceMap();
-        this.toNmsMapping.loadMappings(
-                new BufferedReader(new InputStreamReader(MohistRemapper.class.getClassLoader().getResourceAsStream("mappings/" + obsVersion.getObs_version() + "/nms.srg"))),
-                null, null, false
-        );
+        InputStream nmsFile = MohistRemapper.class.getClassLoader().getResourceAsStream("mappings/" + obsVersion.getObs_version() + "/nms.srg");
+        this.toNmsMapping.loadMappings(new BufferedReader(new InputStreamReader(nmsFile)), null, null, false);
         // TODO workaround for https://github.com/md-5/SpecialSource/pull/81
         //  remove on update
-        var content = new String(MohistRemapper.class.getClassLoader().getResourceAsStream("mappings/" + obsVersion.getObs_version() + "/nms.srg").readAllBytes(), StandardCharsets.UTF_8);
+        var content = new String(nmsFile.readAllBytes(), StandardCharsets.UTF_8);
         var i = content.indexOf("net/minecraft/server/level/ChunkMap net/minecraft/server/level/ChunkTracker");
         var nextSection = content.substring(i).lines().skip(1).dropWhile(it -> it.startsWith("\t")).findFirst().orElseThrow();
         var nextIndex = content.indexOf(nextSection);
@@ -103,8 +102,8 @@ public class MohistRemapper {
 
     @SneakyThrows
     public static void init(McVersion mcVersion) {
-        if (mcVersion.equals(McVersion.v1_18_2)) {
-            throw new UnsupportedOperationException("Cannot supported 1.18.2, Please wait for follow-up support!");
+        if (!mcVersion.equals(McVersion.v1_19_3)) {
+            throw new UnsupportedOperationException("Versions earlier than 1.19.3 are not supported, Please wait for follow-up support!");
         }
         obsVersion = mcVersion;
         INSTANCE = new MohistRemapper();

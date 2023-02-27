@@ -99,28 +99,18 @@ public class ASMUtils {
         if (className.startsWith("[")) {
             return className.replace('.', '/');
         }
-        switch (className) {
-            case "byte":
-                return "B";
-            case "short":
-                return "S";
-            case "int":
-                return "I";
-            case "long":
-                return "J";
-            case "float":
-                return "F";
-            case "double":
-                return "D";
-            case "boolean":
-                return "Z";
-            case "char":
-                return "C";
-            case "void":
-                return "V";
-            default:
-                return "L" + className.replace('.', '/') + ";";
-        }
+        return switch (className) {
+            case "byte" -> "B";
+            case "short" -> "S";
+            case "int" -> "I";
+            case "long" -> "J";
+            case "float" -> "F";
+            case "double" -> "D";
+            case "boolean" -> "Z";
+            case "char" -> "C";
+            case "void" -> "V";
+            default -> "L" + className.replace('.', '/') + ";";
+        };
     }
 
     public static String toDescriptorV2(String internalName) {
@@ -170,7 +160,7 @@ public class ASMUtils {
         for (Class<?> aClass : classes) {
             sj.add(toDescriptor(aClass));
         }
-        return sj.toString() + toDescriptor(returnType);
+        return sj + toDescriptor(returnType);
     }
 
     public static void dump(Path dir, byte[] bs) throws IOException {
