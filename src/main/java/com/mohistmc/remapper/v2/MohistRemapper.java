@@ -103,6 +103,9 @@ public class MohistRemapper {
 
     @SneakyThrows
     public static void init(McVersion mcVersion) {
+        if (mcVersion.equals(McVersion.v1_18_2)) {
+            throw new UnsupportedOperationException("Cannot supported 1.18.2, Please wait for follow-up support!");
+        }
         obsVersion = mcVersion;
         INSTANCE = new MohistRemapper();
     }
