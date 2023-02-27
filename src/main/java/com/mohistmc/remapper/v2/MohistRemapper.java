@@ -72,12 +72,12 @@ public class MohistRemapper {
         this.toBukkitMapping = new JarMapping();
         this.inheritanceMap = new InheritanceMap();
         this.toNmsMapping.loadMappings(
-                new BufferedReader(new InputStreamReader(MohistRemapper.class.getClassLoader().getResourceAsStream("mappings/nms.srg"))),
+                new BufferedReader(new InputStreamReader(MohistRemapper.class.getClassLoader().getResourceAsStream("mappings/" + obsVersion.getObs_version() + "/nms.srg"))),
                 null, null, false
         );
         // TODO workaround for https://github.com/md-5/SpecialSource/pull/81
         //  remove on update
-        var content = new String(MohistRemapper.class.getClassLoader().getResourceAsStream("mappings/nms.srg").readAllBytes(), StandardCharsets.UTF_8);
+        var content = new String(MohistRemapper.class.getClassLoader().getResourceAsStream("mappings/" + obsVersion.getObs_version() + "/nms.srg").readAllBytes(), StandardCharsets.UTF_8);
         var i = content.indexOf("net/minecraft/server/level/ChunkMap net/minecraft/server/level/ChunkTracker");
         var nextSection = content.substring(i).lines().skip(1).dropWhile(it -> it.startsWith("\t")).findFirst().orElseThrow();
         var nextIndex = content.indexOf(nextSection);
@@ -90,7 +90,7 @@ public class MohistRemapper {
                 null, null, true
         );
         BiMap<String, String> inverseClassMap = HashBiMap.create(toNmsMapping.classes).inverse();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(MohistRemapper.class.getClassLoader().getResourceAsStream("mappings/inheritanceMap.txt")))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(MohistRemapper.class.getClassLoader().getResourceAsStream("mappings/" + obsVersion.getObs_version() + "/inheritanceMap.txt")))) {
             inheritanceMap.load(reader, inverseClassMap);
         }
         JointProvider inheritanceProvider = new JointProvider();
