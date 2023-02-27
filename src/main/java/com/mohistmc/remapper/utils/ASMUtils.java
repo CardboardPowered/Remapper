@@ -1,4 +1,4 @@
-package com.mohistmc.mohistremap.utils;
+package com.mohistmc.remapper.utils;
 
 import java.io.File;
 import java.io.IOException;

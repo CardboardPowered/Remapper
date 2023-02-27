@@ -1,4 +1,4 @@
-package com.mohistmc.mohistremap.utils;
+package com.mohistmc.remapper.utils;
 
 public class ReflectionUtils {
     private static final SecurityManager securityManager = new SecurityManager();
