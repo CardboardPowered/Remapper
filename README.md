@@ -10,6 +10,6 @@
  }
 
 dependencies {
-    implementation 'com.mohistmc.remapper:mohistremapper:0.1'
+    implementation 'com.mohistmc.remapper:mohistremapper:0.2'
 }
 ```

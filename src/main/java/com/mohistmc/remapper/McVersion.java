@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public enum McVersion {
+    v1_19_4("v1_19_R3"),
     v1_19_3("v1_19_R2"),
     v1_18_2("v1_18_R2");
 

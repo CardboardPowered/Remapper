@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.mohistmc.remapper'
-version '0.2'
+version '0.3'
 
 repositories {
     mavenCentral()
@@ -23,7 +23,7 @@ dependencies {
     implementation 'org.ow2.asm:asm-util:9.4'
     implementation 'org.ow2.asm:asm-analysis:9.4'
     implementation 'com.google.guava:guava:31.1-jre'
-    implementation 'net.md-5:SpecialSource:1.8.5'
+    implementation 'net.md-5:SpecialSource:1.11.0'
 
     implementation 'org.apache.logging.log4j:log4j-api:2.19.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
