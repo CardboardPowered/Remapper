@@ -16,6 +16,15 @@ repositories {
 
 // java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
+configure([tasks.compileJava]) {
+    sourceCompatibility = 16 // for the IDE support
+    options.release = 16
+
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 dependencies {
     implementation 'org.ow2.asm:asm:9.4'
     implementation 'org.ow2.asm:asm-commons:9.4'
