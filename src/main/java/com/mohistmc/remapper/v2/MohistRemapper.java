@@ -4,8 +4,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mohistmc.remapper.McVersion;
 import com.mohistmc.remapper.utils.Unsafe;
-import lombok.Setter;
-import lombok.SneakyThrows;
 import net.md_5.specialsource.InheritanceMap;
 import net.md_5.specialsource.JarMapping;
 import net.md_5.specialsource.JarRemapper;
@@ -36,9 +34,13 @@ public class MohistRemapper {
     public static final File DUMP = null;
     public static MohistRemapper INSTANCE;
     public static Logger LOGGER = LogManager.getLogger(MohistRemapper.class.getName());
-    @Setter
+    // @Setter
     public static McVersion obsVersion;
     private static long pkgOffset, clOffset, mdOffset, fdOffset, mapOffset;
+	
+	public static void setObsVersion(McVersion obs_version) {
+		obsVersion = obs_version;
+	}
 
     static {
         try {
@@ -85,13 +87,16 @@ public class MohistRemapper {
         RemapSourceHandler.register();
     }
 
-    @SneakyThrows
     public static void init(McVersion mcVersion) {
         if (!mcVersion.equals(McVersion.v1_19_3)) {
             //throw new UnsupportedOperationException("Versions earlier than 1.19.3 are not supported, Please wait for follow-up support!");
         }
         obsVersion = mcVersion;
-        INSTANCE = new MohistRemapper();
+		try { 
+			INSTANCE = new MohistRemapper();
+		} catch (Throwable t) {
+			System.out.println(t);
+		}
     }
 
     public static ClassLoaderRemapper createClassLoaderRemapper(ClassLoader classLoader) {

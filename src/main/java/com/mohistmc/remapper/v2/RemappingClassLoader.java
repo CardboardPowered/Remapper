@@ -1,6 +1,6 @@
 package com.mohistmc.remapper.v2;
 
-import cpw.mods.modlauncher.TransformingClassLoader;
+// import cpw.mods.modlauncher.TransformingClassLoader;
 
 /**
  * RemappingClassLoader
@@ -16,7 +16,7 @@ public interface RemappingClassLoader {
     static ClassLoader asTransforming(ClassLoader classLoader) {
         boolean found = false;
         while (classLoader != null) {
-            if (classLoader instanceof TransformingClassLoader || classLoader instanceof RemappingClassLoader) {
+            if (/*classLoader instanceof TransformingClassLoader ||*/ classLoader instanceof RemappingClassLoader) {
                 found = true;
                 break;
             } else {
