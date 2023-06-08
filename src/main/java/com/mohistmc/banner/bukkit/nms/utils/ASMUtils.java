@@ -1,5 +1,15 @@
-package com.mohistmc.remapper.utils;
+package com.mohistmc.banner.bukkit.nms.utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
+import java.util.function.BiConsumer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
@@ -12,27 +22,18 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
-import java.util.function.BiConsumer;
-
 /**
+ *
  * @author pyz
  * @date 2019/7/2 8:16 PM
  */
 public class ASMUtils {
 
-    public static final String classLoaderdesc = "java/lang/ClassLoader";
     private static final Map<Integer, String> opcodeMap = new HashMap<>();
     private static final Map<Integer, String> typeMap = new HashMap<>();
     private static final Map<Integer, BiConsumer<String, AbstractInsnNode>> printerMap = new HashMap<>();
+    public static final String classLoaderdesc = "java/lang/ClassLoader";
+    public static final String urlclassLoaderdesc = "java/net/URLClassLoader";
 
     static {
         for (Field field : Opcodes.class.getDeclaredFields()) {
@@ -99,18 +100,28 @@ public class ASMUtils {
         if (className.startsWith("[")) {
             return className.replace('.', '/');
         }
-        return switch (className) {
-            case "byte" -> "B";
-            case "short" -> "S";
-            case "int" -> "I";
-            case "long" -> "J";
-            case "float" -> "F";
-            case "double" -> "D";
-            case "boolean" -> "Z";
-            case "char" -> "C";
-            case "void" -> "V";
-            default -> "L" + className.replace('.', '/') + ";";
-        };
+        switch (className) {
+            case "byte":
+                return "B";
+            case "short":
+                return "S";
+            case "int":
+                return "I";
+            case "long":
+                return "J";
+            case "float":
+                return "F";
+            case "double":
+                return "D";
+            case "boolean":
+                return "Z";
+            case "char":
+                return "C";
+            case "void":
+                return "V";
+            default:
+                return "L" + className.replace('.', '/') + ";";
+        }
     }
 
     public static String toDescriptorV2(String internalName) {
@@ -160,7 +171,7 @@ public class ASMUtils {
         for (Class<?> aClass : classes) {
             sj.add(toDescriptor(aClass));
         }
-        return sj + toDescriptor(returnType);
+        return sj.toString() + toDescriptor(returnType);
     }
 
     public static void dump(Path dir, byte[] bs) throws IOException {
