@@ -2,3 +2,5 @@
 /.idea/
 /.gradle/
 /maven/
+.project
+.settings/
