@@ -1,10 +1,12 @@
 # ![](https://i.imgur.com/STyQQ6c.png)
 
-Forked from: [MohistMC/MohistRemapper](https://github.com/MohistMC/MohistRemapper) <small>(now deleted?)</small>
+Class/Reflection Remapper
+
+Forked from: [MohistRemapper](https://github.com/MohistMC/MohistRemapper) from [Arclight](https://github.com/IzzelAliz/Arclight.git)
 
 ## MohistRemapper
 
-### Remap system is separated from Mohist for mohist-1.18+, Form [**Arclight**](https://github.com/IzzelAliz/Arclight.git)
+### Remap system is separated from Mohist for mohist-1.18+, from [**Arclight**](https://github.com/IzzelAliz/Arclight.git)
 
 
 ### USE
